@@ -10,10 +10,6 @@ const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// const bcrypt = require('bcrypt');
-// const saltRounds = 10;
-// const md5 = require('md5');
-// const encrypt = require('mongoose-encryption');
 
 const app = express();
 app.use(express.static("public"));
@@ -45,9 +41,6 @@ const User = new mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
 
-// use static serialize and deserialize of model for passport session support
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -85,10 +78,6 @@ app.get("/auth/google/secrets",
   passport.authenticate('google', { failureRedirect: "/login" }),
   function(req, res) {
     res.send('<script> window.opener.location="/secrets"; window.close();</script>');
-    // Successful authentication, redirect secrets.
-     // res.redirect("/secrets");
-    // res.end();
-    // res.render('popup', {user: req.user});
   });
 
 app.get("/register", function(req, res){
@@ -157,20 +146,6 @@ app.post("/register", function(req, res){
       });
     }
   });
-
-  // bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-  //   const newUser = new User({
-  //     email: req.body.username,
-  //     password: hash
-  //   });
-  //   newUser.save(function(err){
-  //     if(!err){
-  //       res.render('secrets')
-  //     }else {
-  //       console.log(err);
-  //     }
-  //   });
-  // });
 });
 
 app.post("/login", function(req, res){
@@ -188,28 +163,9 @@ app.post("/login", function(req, res){
       });
     }
   });
-  // const username = req.body.username;
-  // const password = req.body.password;
-  //
-  // User.findOne({email: username}, function(err, founduser){
-  //   if(err) {
-  //     console.log(err);
-  //   }else {
-  //     if(founduser){
-  //       bcrypt.compare(password, founduser.password, function(err, result) {
-  //       if(result === true){
-  //           res.render('secrets');
-  //       }
-  //     });
-  //     }
-  //   }
-  // });
 });
 
 app.listen(3000, function(){
   console.log("Server started running on port 3000");
 });
 
-
-//clientID: 208536222878-4fj4huas6ocahdko8hecr86lmic3v7fl.apps.googleusercontent.com
-//clientSecret: UFfidAfM1-nBhyZ990QExiAK
